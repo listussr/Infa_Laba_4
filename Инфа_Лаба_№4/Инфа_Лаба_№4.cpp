@@ -1,9 +1,4 @@
-﻿#include<fstream>
-#include<iostream>
-#include<vector>
-#include<string>
-#include<iomanip>
-#include<conio.h>
+#include"Design.h"
 #define EOL '\n'
 using namespace std;
 
@@ -104,11 +99,6 @@ vector<char> entering_first_word()
 	{
 		answer.push_back(a[i]);
 	}
-	if (!checking_word(answer, list_of_words))
-	{
-		cout << "Incorrect input - you lose" << endl;
-		entering_first_word();
-	}
 	return answer;
 }
 
@@ -132,7 +122,7 @@ vector<vector<char>> list_of_words_me(vector<char>& vec)
 vector<char> entering_word(vector<vector<char>>& vecn)
 {
 	string a;
-	cout << "Enter next word from a text document" << endl;
+	cout << "You: " << endl;
 	cin >> a;
 	cout << "________________________________________________________________________________________________________________________" << endl;
 	vector<char> answer;
@@ -140,10 +130,6 @@ vector<char> entering_word(vector<vector<char>>& vecn)
 	{
 		answer.push_back(a[i]);
 	}
-	/*if (!checking_word(answer, vecn))
-	{
-		cout << "Incorrect input - you lose" << endl;
-	}*/
 	return answer;
 }
 
@@ -178,7 +164,7 @@ int iteration_me(vector<char>& vec, vector<vector<char>>& vecn)
 		if (symbol == symbol_next){
 			int h = i;
 			int j = vecn[i].size();
-			cout << "Next word is: " << endl;
+			cout << "Bot: " << endl;
 			for (int j = 0; j < vecn[i].size(); j++)
 				cout << vecn[i][j];
 			cout << endl;
@@ -224,7 +210,7 @@ void post_iteration_bot(vector<char>& bot_answer, vector<vector<char>>& vec)
 	}
 	int f = me.size();
 	char first_letter = me[0];
-	if (first_letter != last_letter || checking_word(me, list))
+	if (first_letter != last_letter || !checking_word(me, vec))
 	{
 		cout << "Your word can't be accepted - you lose" << endl;
 		return;
@@ -237,6 +223,10 @@ void game()
 	if (begin())
 	{
 		vector<char> my_answer = entering_first_word();
+		if (!checking_word(my_answer, list_of_words)) {
+			cout << "Your word is incorrect - you lose" << endl;
+			return;
+		}
 		vector<vector<char>> list_of_words_after_me = list_of_words_me(my_answer);
 		iteration_me(my_answer, list_of_words_after_me);
 	}
@@ -248,50 +238,20 @@ void game()
 	}
 }
 
-void color_choosing()
-{
-	cout << "What color of console do you want to have?" << endl;
-	cout << "black -> 1" << endl
-		<< "blue -> 2" << endl
-		<< "green -> 3" << endl
-		<< "red -> 4" << endl
-		<< "purple -> 5" << endl
-		<< "yellow -> 6" << endl
-		<< "white -> 7" << endl
-		<< "gray -> 8" << endl
-		<< "light blue -> 9" << endl;
-	string a;
-	cin >> a;
-	while (a != "1" && a != "2" && a != "3" && a != "4" && a != "5" && a != "6" && a != "7" && a != "8" && a != "9")
-	{
-		getline(cin, a);
-	}
-	if (a == "1") system("Color 1");
-	if (a == "2") system("Color 2");
-	if (a == "3") system("Color 3");
-	if (a == "4") system("Color 4");
-	if (a == "5") system("Color 5");
-	if (a == "6") system("Color 6");
-	if (a == "7") system("Color 7");
-	if (a == "8") system("Color 8");
-	if (a == "9") system("Color 9");
-}
-
 void start_menu()
 {
 	string a;
 	cout << '\t' << '\t' << '\t' << '\t' << '\t' << "You are in startup menu" << endl << endl;
-	cout << " ---> If you want to change color of the text press c or C " << endl << endl;
+	cout << " ---> If you want to change design of console press 'd' or 'D'" << endl << endl;
 	cout << " ---> If you want to start game press q or Q " << endl << endl;
 	getline(cin, a);
-	while (a != "c" && a != "C" && a != "q" && a != "Q") {
+	while (a != "d" && a != "D" && a != "q" && a != "Q") {
 		getline(cin, a);
 	}
-	if (a == "c" || a == "C")
+	if (a == "d" || a == "D")
 	{
 		system("cls");
-
-		color_choosing();
+		design_of_console();
 		system("cls");
 		start_menu();
 	}
