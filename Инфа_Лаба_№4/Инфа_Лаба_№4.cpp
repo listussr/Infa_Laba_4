@@ -9,8 +9,7 @@ bool continue_check()
 	cout << endl << "Do you want to continue?" << endl;
 	cout << "If you want - press q or Q" << endl;
 	cout << "If you want to quit - press x or X" << endl;
-	while (!(cin >> symbol) || flag)
-	{
+	while (!(cin >> symbol) || flag){
 		cin.clear();
 		if ((symbol == 'X' || symbol == 'x') && (cin.peek() == EOL)) {
 			flag = false;
@@ -28,37 +27,28 @@ bool continue_check()
 	}
 }
 
-vector<vector<char>> massive()
-{
+vector<vector<char>> massive(){
 	char symbol;
 	int i = 0;
-	int j = 0;
 	vector <vector<char>> input;
 	input.push_back(vector<char>());
 	ifstream in("words_game.txt");
-	if (!in.is_open())
-		cout << "This file cant be open!\n";
-	else
-	{
-		while ((symbol = in.get()) != EOF)
-		{
-			if (symbol != EOL)
-				input[i].push_back(symbol);
-			else {
-				input.push_back(vector<char>());
-				++i;
-			}
+	while ((symbol = in.get()) != EOF) {
+		if (symbol != EOL)
+			input[i].push_back(symbol);
+		else {
+			input.push_back(vector<char>());
+			++i;
 		}
-		in.close();
 	}
+	in.close();
 	cout << endl;
 	return input;
 }
 
 vector<vector<char>> list_of_words = massive();
 
-bool begin()
-{
+bool begin(){
 	string answer;
 	cout << '\t' << '\t' << '\t' << '\t' << '\t' << "You have entered a game named 'Words' " << endl << endl;;
 	cout << "If you want to be first player print 'me' " << endl;
@@ -70,25 +60,21 @@ bool begin()
 		return false;
 	if (answer == "me")
 		return true;
-	while (answer != "me" && answer != "bot")
-	{
+	while (answer != "me" && answer != "bot"){
 		cout << "Incorrect input - try again: " << endl;
 		cin >> answer;
 	}
 }
 
-bool checking_word(vector<char> answer, vector<vector<char>> vecn)
-{
-	for (int i = 0; i < vecn.size(); i++)
-	{
+bool checking_word(vector<char> answer, vector<vector<char>> vecn){
+	for (int i = 0; i < vecn.size(); i++){
 		if (answer == vecn[i])
 			return true;
 	}
 	return false;
 }
 
-vector<char> entering_first_word()
-{
+vector<char> entering_first_word(){
 	string a;
 	cout << "You are first player" << endl;
 	cout << "Enter word from text document" << endl;
@@ -96,19 +82,14 @@ vector<char> entering_first_word()
 	cout << "________________________________________________________________________________________________________________________" << endl;
 	vector<char> answer;
 	for (int i = 0; i < a.size(); i++)
-	{
 		answer.push_back(a[i]);
-	}
 	return answer;
 }
 
-vector<vector<char>> list_of_words_me(vector<char>& vec)
-{
+vector<vector<char>> list_of_words_me(vector<char>& vec){
 	vector<vector<char>> a;
-	for (int i = 0; i < list_of_words.size(); i++)
-	{
-		if (vec == list_of_words[i])
-		{
+	for (int i = 0; i < list_of_words.size(); i++){
+		if (vec == list_of_words[i]){
 			int h = i;
 			for (int i = 0; i < h - 1; i++)
 				a.push_back(list_of_words[i]);
@@ -119,26 +100,21 @@ vector<vector<char>> list_of_words_me(vector<char>& vec)
 	return a;
 }
 
-vector<char> entering_word(vector<vector<char>>& vecn)
-{
+vector<char> entering_word(vector<vector<char>>& vecn){
 	string a;
 	cout << "You: " << endl;
 	cin >> a;
 	cout << "________________________________________________________________________________________________________________________" << endl;
 	vector<char> answer;
 	for (int i = 0; i < a.size(); i++)
-	{
 		answer.push_back(a[i]);
-	}
 	return answer;
 }
 
-vector<char> iteration_bot()
-{
+vector<char> iteration_bot(){
 	vector<char> answer;
 	cout << "Bot says: " << endl;
-	for (int i = 0; i < list_of_words[0].size(); i++)
-	{
+	for (int i = 0; i < list_of_words[0].size(); i++){
 		answer.push_back(list_of_words[0][i]);
 		cout << answer[i];
 	}
@@ -153,8 +129,7 @@ vector<vector<char>> post_list_bot() {
 	return a;
 }
 
-int iteration_me(vector<char>& vec, vector<vector<char>>& vecn)
-{
+int iteration_me(vector<char>& vec, vector<vector<char>>& vecn){
 	vector<vector<char>> list;
 	vector<char> answer;
 	int p = vec.size();
@@ -188,11 +163,20 @@ int iteration_me(vector<char>& vec, vector<vector<char>>& vecn)
 		cout << "Your word can't be accepted - you lose" << endl;
 		return 0;
 	}
-	iteration_me(me, list);
+	vector<vector<char>> list_2;
+	for (int i = 0; i < list.size(); i++){
+		if (me == list[i]){
+			int u = i;
+			for (int i = 0; i < u - 1; i++)
+				list_2.push_back(list[i]);
+			for (int i = u + 1; i < list.size(); i++)
+				list_2.push_back(list[i]);
+		}
+	}
+	iteration_me(me, list_2);
 }
 
-void post_iteration_bot(vector<char>& bot_answer, vector<vector<char>>& vec)
-{
+void post_iteration_bot(vector<char>& bot_answer, vector<vector<char>>& vec){
 	vector<vector<char>> list;
 	int l = bot_answer.size();
 	char last_letter = bot_answer[l - 1];
@@ -210,18 +194,15 @@ void post_iteration_bot(vector<char>& bot_answer, vector<vector<char>>& vec)
 	}
 	int f = me.size();
 	char first_letter = me[0];
-	if (first_letter != last_letter || !checking_word(me, vec))
-	{
+	if (first_letter != last_letter || !checking_word(me, vec)){
 		cout << "Your word can't be accepted - you lose" << endl;
 		return;
 	}
 	else iteration_me(me, list);
 }
 
-void game()
-{
-	if (begin())
-	{
+void game(){
+	if (begin()){
 		vector<char> my_answer = entering_first_word();
 		if (!checking_word(my_answer, list_of_words)) {
 			cout << "Your word is incorrect - you lose" << endl;
@@ -230,8 +211,7 @@ void game()
 		vector<vector<char>> list_of_words_after_me = list_of_words_me(my_answer);
 		iteration_me(my_answer, list_of_words_after_me);
 	}
-	else
-	{
+	else{
 		vector<char> bot_answer = iteration_bot();
 		vector<vector<char>> list_of_words_after_bot = post_list_bot();
 		post_iteration_bot(bot_answer, list_of_words_after_bot);
@@ -248,8 +228,7 @@ void start_menu()
 	while (a != "d" && a != "D" && a != "q" && a != "Q") {
 		getline(cin, a);
 	}
-	if (a == "d" || a == "D")
-	{
+	if (a == "d" || a == "D"){
 		system("cls");
 		design_of_console();
 		system("cls");
@@ -258,11 +237,9 @@ void start_menu()
 	if (a == "q" || a == "Q") return;
 }
 
-int main()
-{
+int main(){
 	bool iteration = true;
-	while (iteration)
-	{
+	while (iteration){
 		start_menu();
 		system("cls");
 		game();
